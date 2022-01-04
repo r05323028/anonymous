@@ -5,12 +5,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var user string
-var password string
-var database string
-var host string
-var port string
-
 var dbCmd = &cobra.Command{
 	Use:   "db",
 	Short: "Database Command Line Tools",
@@ -22,6 +16,11 @@ var initDBCmd = &cobra.Command{
 	Use:   "init",
 	Short: "Initialize database",
 	Run: func(cmd *cobra.Command, args []string) {
+		user, _ := cmd.Flags().GetString("user")
+		password, _ := cmd.Flags().GetString("password")
+		host, _ := cmd.Flags().GetString("host")
+		port, _ := cmd.Flags().GetString("port")
+		database, _ := cmd.Flags().GetString("database")
 		db.InitDB(user, password, host, port, database)
 	},
 }
@@ -39,10 +38,9 @@ func init() {
 	rootCmd.AddCommand(dbCmd)
 
 	// add flags
-	dbCmd.PersistentFlags().StringVar(&host, "host", "127.0.0.1", "host")
-	dbCmd.PersistentFlags().StringVar(&port, "port", "3306", "Port")
-	dbCmd.PersistentFlags().StringVarP(&user, "user", "u", "root", "user name")
-	dbCmd.PersistentFlags().StringVarP(&password, "password", "p", "", "password")
-	dbCmd.PersistentFlags().StringVarP(&database, "database", "d", "anonymous", "database")
-	dbCmd.MarkFlagRequired("password")
+	dbCmd.PersistentFlags().String("host", "127.0.0.1", "Database host")
+	dbCmd.PersistentFlags().String("port", "3306", "Database port")
+	dbCmd.PersistentFlags().String("user", "anonymous", "Database user")
+	dbCmd.PersistentFlags().String("password", "example", "Database password")
+	dbCmd.MarkPersistentFlagRequired("password")
 }
