@@ -1,0 +1,63 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+      args:
+        VARIANT: "1.17-bullseye"
+        NODE_VERSION: "none"
+    volumes:
+      - ..:/workspaces/anonymous:cached
+      - $HOME/.ssh/:/home/vscode/.ssh/
+    command: sleep infinity
+    networks:
+      - anonymous
+  
+  mysql:
+    image: mysql:8
+    platform: linux/amd64
+    volumes:
+      - anonymous-mysql:/var/lib/mysql
+    env_file: ../.env.development
+    ports:
+      - 3306:3306
+    networks:
+      - anonymous
+
+  nsqd:
+    image: nsqio/nsq:latest
+    ports:
+      - 4150:4150
+      - 4151:4151
+    command: /nsqd --lookupd-tcp-address=nsqlookupd:4160
+    networks:
+      - anonymous
+    depends_on:
+      - nsqlookupd
+
+  nsqadmin:
+    image: nsqio/nsq
+    command: /nsqadmin --lookupd-http-address=nsqlookupd:4161
+    ports:
+      - 4171:4171
+    networks:
+      - anonymous
+    depends_on:
+      - nsqlookupd
+    
+  nsqlookupd:
+    image: nsqio/nsq:latest
+    ports:
+      - 4160:4160
+      - 4161:4161
+    networks:
+      - anonymous
+    command: /nsqlookupd
+
+volumes:
+  anonymous-mysql:
+
+networks:
+  anonymous:
