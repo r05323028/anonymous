@@ -22,7 +22,9 @@ var startConsumer = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		host, _ := cmd.Flags().GetString("host")
 		port, _ := cmd.Flags().GetString("port")
-		mq.RunConsumer(host, port)
+		topic, _ := cmd.Flags().GetString("topic")
+		channel, _ := cmd.Flags().GetString("channel")
+		mq.RunConsumer(host, port, topic, channel)
 	},
 }
 
@@ -40,7 +42,6 @@ var pushMessage = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-
 		messageBody := []byte(message)
 
 		// Synchronously publish a single message to the specified topic.
@@ -63,10 +64,12 @@ func init() {
 	// consumer flags
 	startConsumer.Flags().String("host", "nsqlookupd", "NSQ Daemon host")
 	startConsumer.Flags().String("port", "4161", "NSQ Daemon port")
+	startConsumer.Flags().String("topic", "anonymous", "NSQ Topic")
+	startConsumer.Flags().String("channel", "general", "NSQ Channel")
 
 	// producer flags
 	pushMessage.Flags().String("host", "nsqd", "NSQ Daemon host")
 	pushMessage.Flags().String("port", "4150", "NSQ Daemon port")
 	pushMessage.Flags().String("topic", "anonymous", "Topic")
-	pushMessage.Flags().String("message", "", "Topic")
+	pushMessage.Flags().String("message", "", "Message")
 }

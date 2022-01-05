@@ -24,14 +24,14 @@ func (h *MessageHandler) HandleMessage(m *nsq.Message) error {
 	return err
 }
 
-func RunConsumer(host string, port string) {
+func RunConsumer(host string, port string, topic string, channel string) {
 	config := nsq.NewConfig()
-	consumer, err := nsq.NewConsumer("anonymous", "general", config)
+	consumer, err := nsq.NewConsumer(topic, channel, config)
 	if err != nil {
 		log.Fatal(err)
 	}
 	consumer.AddHandler(&MessageHandler{})
-	dsn := fmt.Sprintf("%v:%v", "nsqlookupd", "4161")
+	dsn := fmt.Sprintf("%v:%v", host, port)
 	err = consumer.ConnectToNSQLookupd(dsn)
 	if err != nil {
 		log.Fatal(err)
