@@ -27,6 +27,7 @@ func (h *MessageHandler) HandleMessage(m *nsq.Message) error {
 func RunConsumer(host string, port string, topic string, channel string) {
 	config := nsq.NewConfig()
 	consumer, err := nsq.NewConsumer(topic, channel, config)
+
 	if err != nil {
 		log.Fatal(err)
 	}

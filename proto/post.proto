@@ -1,0 +1,6 @@
+syntax = "proto3";
+option go_package = "./";
+message Post {
+    string name = 1;
+    string author = 2;
+}
