@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/golang/protobuf/proto"
 	"github.com/nsqio/go-nsq"
 	pb "github.com/r05323028/anonymous/proto"
+	"google.golang.org/protobuf/proto"
 )
 
 type Producer struct {
