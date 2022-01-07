@@ -24,7 +24,12 @@ var startConsumer = &cobra.Command{
 		port, _ := cmd.Flags().GetString("port")
 		topic, _ := cmd.Flags().GetString("topic")
 		channel, _ := cmd.Flags().GetString("channel")
-		mq.RunConsumer(host, port, topic, channel)
+		dbHost, _ := cmd.Flags().GetString("dbHost")
+		dbPort, _ := cmd.Flags().GetString("dbPort")
+		dbUser, _ := cmd.Flags().GetString("dbUser")
+		dbPassword, _ := cmd.Flags().GetString("dbPassword")
+		dbName, _ := cmd.Flags().GetString("dbName")
+		mq.RunConsumer(host, port, topic, channel, dbHost, dbPort, dbUser, dbPassword, dbName)
 	},
 }
 
@@ -66,6 +71,11 @@ func init() {
 	startConsumer.Flags().String("port", "4161", "NSQ Daemon port")
 	startConsumer.Flags().String("topic", "anonymous", "NSQ Topic")
 	startConsumer.Flags().String("channel", "general", "NSQ Channel")
+	startConsumer.Flags().String("dbUser", "anonymous", "Database User")
+	startConsumer.Flags().String("dbPassword", "example", "Database Password")
+	startConsumer.Flags().String("dbHost", "mysql", "Database Host")
+	startConsumer.Flags().String("dbPort", "3306", "Database Port")
+	startConsumer.Flags().String("dbName", "anonymous", "Database Name")
 
 	// producer flags
 	pushMessage.Flags().String("host", "nsqd", "NSQ Daemon host")

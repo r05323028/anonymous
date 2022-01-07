@@ -42,5 +42,6 @@ func init() {
 	dbCmd.PersistentFlags().String("port", "3306", "Database port")
 	dbCmd.PersistentFlags().String("user", "anonymous", "Database user")
 	dbCmd.PersistentFlags().String("password", "example", "Database password")
+	dbCmd.PersistentFlags().String("database", "anonymous", "Database name")
 	dbCmd.MarkPersistentFlagRequired("password")
 }
