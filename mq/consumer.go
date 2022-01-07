@@ -1,7 +1,6 @@
 package mq
 
 import (
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -14,14 +13,10 @@ import (
 type MessageHandler struct{}
 
 func (h *MessageHandler) HandleMessage(m *nsq.Message) error {
-	if len(m.Body) == 0 {
-		// Returning nil will automatically send a FIN command to NSQ to mark the message as processed.
-		// In this case, a message with an empty body is simply ignored/discarded.
-		return nil
-	}
+	// process message
 	log.Println(string(m.Body))
-	err := errors.New("Test")
-	return err
+
+	return nil
 }
 
 func RunConsumer(host string, port string, topic string, channel string) {
